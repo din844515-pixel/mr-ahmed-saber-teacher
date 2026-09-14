@@ -120,6 +120,17 @@
 <script src="app.js"></script>
   <script src="install.js"></script>
   <script src="manual_grading.js"></script>
+  <script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js', {
+      updateViaCache: 'none'
+    }).then(function (registration) {
+      registration.update();
+    }).catch(function () {});
+  });
+}
+</script>
 <style>
 .assignmentBox{max-width:720px;width:94vw}.assignmentTop{display:flex;gap:8px;align-items:center;margin:12px 0;flex-wrap:wrap}.assignmentTop input{flex:1;min-width:220px}.assignmentList{max-height:52vh;overflow:auto;border:1px solid #dde4ec;border-radius:12px;padding:6px;background:#fafcfe}.assignmentRow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #edf1f5;font-size:13px}.assignmentRow:last-child{border-bottom:0}.assignmentRow input{width:17px;height:17px}.assignmentRow .num{min-width:26px;text-align:center;color:#7b8794}.assignmentRow small{margin-right:auto;color:#7b8794}.assignmentTop button{font-size:12px;padding:7px 9px}
 </style>
