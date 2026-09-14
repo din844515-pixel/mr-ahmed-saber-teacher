@@ -38,7 +38,7 @@
       <div class="prepManualQuestionGrade" style="margin-top:12px;padding:14px;border-top:2px solid #eee">
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
           <label><b>الدرجة:</b> <input id="prep_qgrade_${r.answer_id}" type="number" min="0" max="${max}" step="0.5" value="${shown}" placeholder="اكتب الدرجة" style="width:120px;padding:10px;border:1px solid #ccc;border-radius:10px"> <b>من ${max}</b></label>
-          <button class="goldAdmin" onclick="saveManualQuestionGrade('${r.answer_id}',${max})">💾 حفظ الدرجة</button>
+          <button type="button" ...class="goldAdmin" onclick="saveManualQuestionGrade('${r.answer_id}',${max})">💾 حفظ الدرجة</button>
         </div>
         <div class="prepManualCorrection" style="margin-top:12px"><label><b>تصحيح الخطأ للطالب</b> <span>(اختياري)</span></label>
           <textarea id="prep_qcorr_${r.answer_id}" rows="2" placeholder="اكتب التصحيح هنا لو حبيت..." style="width:100%;box-sizing:border-box;margin-top:6px">${esc0(corr)}</textarea>
