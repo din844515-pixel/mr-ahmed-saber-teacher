@@ -77,6 +77,7 @@
     const {data,error}=await sb.rpc('save_manual_question_grade',{p_answer_id:Number(answerId),p_points:points,p_correction:String(corr?.value||'')});
     if(error||!data?.success){if(btn){btn.disabled=false;btn.textContent='💾 حفظ الدرجة';}alert(error?.message||data?.message||'تعذر حفظ الدرجة.');return;}
     if(btn){btn.disabled=false;btn.textContent='✓ تم الحفظ';}
+    alert('تم حفظ الدرجة بنجاح ✅');
     const head=input.closest('.studentAnswersGroup')?.querySelector('strong[id^="prep_total_"]'); if(head&&data.total_score!==undefined){ const total=Number(String(head.textContent).split('/')[1])||0; head.textContent=`${Number(data.total_score)} / ${total}`; }
   };
 })();
