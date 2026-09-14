@@ -1,0 +1,2 @@
+-- Applied to live Supabase database: exam_question_edit_grading_modes + student_portal_grading_mode_status
+-- Adds exam_questions.grading_mode = auto/manual and updates submission/manual grading/result-release logic.

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MR. Ahmed Saber | Teacher Control</title>
+<link rel="icon" href="assets/logo.png"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>.teacher-access-hidden{display:none!important}</style>
+<style>.teacher-only-app .hero,.teacher-only-app .features,.teacher-only-app .topbar nav,.teacher-only-app #teacherAccess{display:none!important}.teacher-only-app .modal#login{display:flex!important}</style><style>.onlineDeleteBtn{background:#fff0f0!important;color:#c62828!important;border:1px solid #f3b7b7!important;border-radius:8px!important;padding:7px 12px!important;cursor:pointer!important;font-weight:700!important}.onlineDeleteBtn:hover{background:#ffe1e1!important}</style></head>
+<body class="teacher-only-app">
+<header class="topbar">
+  <div class="brand"><img src="assets/logo.png"><div><div class="name"><span>MR.</span> Ahmed Saber</div><div class="sub">English Online Platform</div></div></div>
+  <nav><a class="active" href="#home">الرئيسية</a><a href="#about">عن المنصة</a><a href="#features">مميزاتنا</a><a href="#contact">تواصل معنا</a></nav>
+  <button id="teacherAccess" class="teacher teacher-access-hidden" onclick="openLogin()">دخول المستر 🔒</button>
+</header>
+
+<section class="hero" id="home">
+  <div class="copy">
+    <img class="hero-logo" src="assets/logo.png">
+    <div class="title"><span>MR.</span><br>Ahmed Saber</div>
+    <div class="en">English Online Platform</div>
+    <p>منصة تعليمية متكاملة لمساعدة<br>طلابنا على التعلم والمذاكرة<br>بأسلوب سهل وممتع</p>
+  </div>
+  <div class="student">
+    <div class="lock">🔐</div><h1>دخول الطالب</h1><p>اكتب كود الطالب للدخول إلى المنصة</p>
+    <input id="code" placeholder="أدخل كود الطالب">
+    <button onclick="studentLogin()">دخول للمنصة ←</button>
+    <small>لست لديك كود؟</small><a href="javascript:openContactMenu()" class="contactLink">تواصل مع مستر أحمد صابر</a>
+  </div>
+</section>
+
+<section class="features" id="features">
+  <div><i>🏆</i><b>النتائج</b><small>عرض درجاتك<br>ومتابعة مستواك</small></div>
+  <div><i>📝</i><b>الامتحانات</b><small>أداء الامتحانات<br>والاختبارات أونلاين</small></div>
+  <div><i>▶️</i><b>فيديوهات الشرح</b><small>مشاهدة جميع<br>فيديوهات الشرح</small></div>
+</section>
+
+
+<div class="modal" id="login">
+ <div class="box"><button class="x" onclick="closeLogin()">×</button><img src="assets/logo.png"><h2>دخول المستر</h2>
+ <input id="email" value="" type="email" autocomplete="username" placeholder="البريد الإلكتروني"><input id="pass" type="password" autocomplete="current-password" placeholder="كلمة المرور">
+ <button onclick="teacherLogin()">دخول</button><p id="msg"></p></div>
+</div>
+<div class="modal" id="dash">
+ <div class="dashboard">
+  <div class="dashbar"><img src="assets/logo.png"><b>MR. Ahmed Saber</b><button onclick="closeDash()">×</button></div>
+  <div class="dash-title"><div><span>Teacher Control</span><h1>لوحة تحكم المستر</h1><p id="teacherWelcome"></p></div><button class="logoutBtn" onclick="teacherLogout()">تسجيل الخروج</button></div>
+  <div class="admin-tabs">
+    <button class="tab active" data-tab="studentsTab" onclick="showAdminTab('studentsTab',this)">👥 الطلاب والأكواد</button>
+    <button class="tab" data-tab="videosTab" onclick="showAdminTab('videosTab',this)">🎥 الفيديوهات</button>
+    <button class="tab" data-tab="examsTab" onclick="showAdminTab('examsTab',this)">📝 الامتحانات</button>
+    <button class="tab" data-tab="announcementsTab" onclick="showAdminTab('announcementsTab',this)">🔔 الإعلانات</button>
+    <button class="tab" data-tab="attendanceTab" onclick="showAdminTab('attendanceTab',this)">📋 الحضور والغياب</button>
+    <button class="tab" data-tab="resultsTab" onclick="showAdminTab('resultsTab',this)">🏆 النتائج</button>
+  </div>
+
+  <section id="studentsTab" class="admin-section">
+   <div class="section-head"><div><h2>إدارة الطلاب</h2><p>أضيفي الطالب وكود الدخول والبيانات المالية والمجموعة، وعدّلي أي طالب أو احذفيه نهائيًا عند مغادرته.</p></div><button class="goldAdmin" onclick="openStudentForm()">+ إضافة طالب</button></div>
+   <div id="studentForm" class="student-form hidden">
+    <input type="hidden" id="editStudentId">
+    <div><label>اسم الطالب</label><input id="studentName" placeholder="مثال: أحمد محمد"></div>
+    <div><label>كود الطالب</label><div class="codeRow"><input id="studentCodeAdmin" placeholder="مثال: AS1001"><button onclick="generateStudentCode()">توليد كود</button></div></div>
+    <div><label>الصف الدراسي</label><select id="studentGrade"><option value="">اختاري الصف</option><option>أولى إعدادي</option><option>ثانية إعدادي</option><option>ثالثة إعدادي</option><option>أولى ثانوي</option><option>ثانية ثانوي</option><option>ثالثة ثانوي</option></select></div>
+    <div><label>رقم الهاتف (اختياري)</label><input id="studentPhone" placeholder="01xxxxxxxxx"></div><div><label>النوع</label><select id="studentGender"><option value="male">ذكر</option><option value="female">أنثى</option></select></div>
+    <div><label>حالة السداد</label><select id="studentPaid"><option value="true">تم السداد</option><option value="false">لم يتم السداد</option></select></div>
+    <div><label>الإعفاء</label><select id="studentExempt"><option value="false">غير معفى</option><option value="true">معفى</option></select></div>
+    <div><label>أيام المجموعة</label><input id="studentGroupDays" placeholder="مثال: السبت والثلاثاء"></div>
+    <div><label>موعد المجموعة</label><input id="studentGroupTime" placeholder="مثال: 5:00 مساءً"></div>
+    <div class="formActions"><button class="goldAdmin" onclick="saveStudent()">حفظ الطالب</button><button onclick="cancelStudentForm()">إلغاء</button></div>
+    <small id="studentFormMsg"></small>
+   </div>
+   <div class="student-tools"><input id="studentSearch" oninput="renderStudents()" placeholder="🔎 ابحثي باسم الطالب أو الكود..."><button onclick="loadStudents()">↻ تحديث</button></div>
+   <div id="gradeLists" class="gradeLists"></div>
+   <div id="studentCount" class="count"></div>
+   <div class="tableWrap" style="display:none"><table><tbody id="studentsBody"></tbody></table></div>
+  </section>
+
+  <section id="videosTab" class="admin-section hidden">
+   <div class="section-head"><div><h2>🎥 فيديوهات الشرح</h2><p>إدارة الفيديوهات بشكل مستقل.</p></div></div>
+   <div class="manage-card"><input id="videoTitle" placeholder="عنوان الدرس"><input id="videoUrl" placeholder="رابط الفيديو (اختياري إذا سترفعين من الهاتف)"><label class="filePick">📱 أو اختاري فيديو من الهاتف<input id="videoFile" type="file" accept="video/*"></label><select id="videoGrade"><option value="">كل الصفوف</option><option>أولى إعدادي</option><option>ثانية إعدادي</option><option>ثالثة إعدادي</option><option>أولى ثانوي</option><option>ثانية ثانوي</option><option>ثالثة ثانوي</option></select><button class="goldAdmin" onclick="saveVideo()">+ إضافة فيديو</button><div id="videosList"></div></div>
+  </section>
+
+  <section id="examsTab" class="admin-section hidden">
+   <div class="section-head"><div><h2>📝 الامتحانات</h2><p>إنشاء وتعديل وحذف الامتحانات وبناء الأسئلة.</p></div></div>
+   <div class="manage-card"><input id="examTitle" placeholder="اسم الامتحان"><select id="examGrade"><option value="">اختاري الصف</option><option>أولى إعدادي</option><option>ثانية إعدادي</option><option>ثالثة إعدادي</option><option>أولى ثانوي</option><option>ثانية ثانوي</option><option>ثالثة ثانوي</option></select><select id="examDuration"><option value="15">15 دقيقة</option><option value="20">20 دقيقة</option><option value="30" selected>30 دقيقة</option><option value="45">45 دقيقة</option><option value="60">60 دقيقة</option><option value="90">90 دقيقة</option><option value="120">120 دقيقة</option></select><select id="examShowAnswers"><option value="false" selected>عدم إظهار الإجابات للطالب</option><option value="true">إظهار الإجابات للطالب</option></select><button class="goldAdmin" onclick="createExam()">+ إنشاء امتحان</button><div id="examGradeLists" class="examGradeLists"></div></div>
+   <div id="examBuilder"></div>
+  </section>
+
+  <section id="announcementsTab" class="admin-section hidden">
+   <div class="section-head"><div><h2>🔔 الإعلانات</h2><p>نشر وتعديل وحذف الإعلانات بشكل مستقل.</p></div></div>
+   <div class="manage-card"><input id="announcementTitle" placeholder="عنوان الإعلان"><textarea id="announcementBody" placeholder="نص الإعلان"></textarea><button class="goldAdmin" onclick="saveAnnouncement()">+ نشر إعلان</button><div id="announcementsList"></div></div>
+  </section>
+
+  <section id="attendanceTab" class="admin-section hidden">
+   <div class="section-head"><div><h2>📋 الحضور والغياب</h2><p>سجلي حضور أو غياب كل طالب حسب اليوم.</p></div></div>
+   <div class="manage-card">
+ <div class="attendanceDailyHead"><div><label>تسجيل حضور يوم</label><input id="attendanceDate" type="date"></div><button class="goldAdmin" onclick="loadAttendance()">عرض اليوم</button></div>
+ <div class="tableWrap"><table><thead><tr><th>الطالب</th><th>الصف</th><th>الحالة</th><th>حفظ</th></tr></thead><tbody id="attendanceBody"></tbody></table></div>
+</div>
+<div class="manage-card monthlyAttendanceCard">
+ <div class="section-head"><div><h3>📊 ملخص الحضور والغياب الشهري</h3><p>اختاري الشهر مرة واحدة وشوفي كل طالب حضر كام يوم، غاب كام يوم، واتحسب له كام يوم إعفاء.</p></div></div>
+ <div class="attendanceDailyHead"><div><label>الشهر</label><input id="attendanceMonth" type="month"></div><button class="goldAdmin" onclick="loadMonthlyAttendance()">إصدار ملخص الشهر</button></div>
+ <div id="monthlyAttendanceBox" class="examAnswersBox"><div class="emptyState">اختاري الشهر لعرض الملخص.</div></div>
+</div>
+  </section>
+
+  <section id="resultsTab" class="admin-section hidden">
+   <div class="section-head"><div><h2>🏆 النتائج وإجابات الطلاب</h2><p>شاهدي نتيجة كل طالب وإجاباته بالتفصيل، وصححي السؤال المقالي يدويًا وحددي درجته.</p></div></div>
+   <div id="resultGradeLists" class="resultGradeLists"></div>
+   <div class="tableWrap" style="display:none"><table><tbody id="resultsBody"></tbody></table></div>
+   <div class="manage-card answersPanel">
+    <h3>📝 إجابات الطلاب</h3>
+    <div class="answersTools"><select id="answersExamSelect"><option value="">اختاري الامتحان لعرض إجابات الطلاب</option></select><button class="goldAdmin" onclick="loadExamAnswers()">عرض الإجابات</button></div>
+    <div id="examAnswersBox" class="examAnswersBox"><div class="emptyState">اختاري امتحانًا أولًا لعرض إجابات الطلاب.</div></div>
+   </div>
+  </section>
+ </div>
+</div>
+<div id="about" class="sr-only">عن منصة MR. Ahmed Saber التعليمية</div><div id="contact" class="sr-only">تواصل مع مستر أحمد صابر</div><footer>MR. Ahmed Saber — English Online Platform ©</footer>
+<script src="app.js"></script>
+<style>
+.assignmentBox{max-width:720px;width:94vw}.assignmentTop{display:flex;gap:8px;align-items:center;margin:12px 0;flex-wrap:wrap}.assignmentTop input{flex:1;min-width:220px}.assignmentList{max-height:52vh;overflow:auto;border:1px solid #dde4ec;border-radius:12px;padding:6px;background:#fafcfe}.assignmentRow{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid #edf1f5;font-size:13px}.assignmentRow:last-child{border-bottom:0}.assignmentRow input{width:17px;height:17px}.assignmentRow .num{min-width:26px;text-align:center;color:#7b8794}.assignmentRow small{margin-right:auto;color:#7b8794}.assignmentTop button{font-size:12px;padding:7px 9px}
+</style>
+</body></html>
